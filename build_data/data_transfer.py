@@ -4,6 +4,7 @@
 import os
 import pandas as pd
 import re
+from pathlib import Path
 
 # ==========================================
 # CONFIGURATION
@@ -16,7 +17,7 @@ RAI_SRC_ROOT   = os.path.join(DROPBOX_ROOT, "Counts_RAI_New",   "Final_Aggregate
 MLEED_SRC_ROOT = os.path.join(DROPBOX_ROOT, "Counts_Env",       "Final_Aggregated")  # NEW
 
 # Destination Roots (repo)
-REPO_ROOT     = "/Users/zungrulin/Documents/GitHub/mlp-data-intro/data"
+REPO_ROOT     = str(Path(__file__).resolve().parents[1] / "data")
 CIVIC_DEST_DIR = os.path.join(REPO_ROOT, "1-civic-aggregate")
 RAI_DEST_DIR   = os.path.join(REPO_ROOT, "1-rai-aggregate")
 MLEED_DEST_DIR = os.path.join(REPO_ROOT, "1-mleed-aggregate")  # NEW (rename to 1-env-aggregate if you prefer)
@@ -69,7 +70,7 @@ def rename_norm_columns(df, prefix=""):
     return df.rename(columns=new_cols)
 
 # ==========================================
-# CIVIC DATA PROCESSING (unchanged)
+# CIVIC DATA PROCESSING (UPDATED FOR COMBINED/CR/NR)
 # ==========================================
 print(f"Processing Civic Data from: {CIVIC_SRC_ROOT}")
 if os.path.exists(CIVIC_SRC_ROOT):
@@ -93,28 +94,84 @@ for country in countries:
             df_cr  = pd.read_csv(file_cr)
             df_ncr = pd.read_csv(file_ncr)
 
+            # Normalize dates
             df_cr  = normalize_date(df_cr)
             df_ncr = normalize_date(df_ncr)
 
-            # CR: rename xxx_norm -> xxxNorm
-            df_cr = rename_norm_columns(df_cr, prefix="")
+            # Standardize naming: xxx_norm -> xxxNorm, no prefixes yet
+            df_cr  = rename_norm_columns(df_cr, prefix="")
+            df_ncr = rename_norm_columns(df_ncr, prefix="")
 
-            # NCR: rename and prefix ncr_
-            keys = ['date', 'year', 'month']
-            df_ncr_renamed = rename_norm_columns(df_ncr, prefix="ncr_")
-            # undo prefix on the merge keys
-            df_ncr_renamed = df_ncr_renamed.rename(columns={f"ncr_{k}": k for k in keys})
+            # Merge CR and NCR on 'date' (and year/month if present)
+            merge_keys = [k for k in ['date', 'year', 'month'] if k in df_cr.columns and k in df_ncr.columns]
+            if 'date' not in merge_keys:
+                merge_keys = ['date']
 
-            # Merge on keys
-            df_merged = pd.merge(df_cr, df_ncr_renamed, on=keys, how='outer')
+            # Restrict to keys + normalized columns
+            def norm_cols(df):
+                return [c for c in df.columns
+                        if c.endswith('Norm') and c not in ['country', 'influencer']]
 
+            cr_norms  = norm_cols(df_cr)
+            ncr_norms = norm_cols(df_ncr)
+
+            # Align columns: assume same event set, but be robust
+            all_events = sorted(set(cr_norms) | set(ncr_norms))
+
+            # Fill missing Norm columns with 0 so we can sum safely
+            for c in all_events:
+                if c not in df_cr.columns:
+                    df_cr[c] = 0.0
+                if c not in df_ncr.columns:
+                    df_ncr[c] = 0.0
+
+            cr_select  = merge_keys + all_events
+            ncr_select = merge_keys + all_events
+
+            df_cr_sel  = df_cr[cr_select].copy()
+            df_ncr_sel = df_ncr[ncr_select].copy()
+
+            merged = pd.merge(df_cr_sel, df_ncr_sel,
+                              on=merge_keys,
+                              suffixes=("_cr", "_ncr"),
+                              how="outer")
+
+            # Build output:
+            # - combined event columns: eventNorm = CR + NCR
+            # - civic-related: cr_eventNorm = CR only
+            # - non-civic:    nr_eventNorm = NCR only
+            out = merged[merge_keys].copy()
+
+            for ev in all_events:
+                cr_col  = f"{ev}_cr"
+                ncr_col = f"{ev}_ncr"
+
+                # ensure columns exist in merged
+                if cr_col not in merged.columns:
+                    merged[cr_col] = 0.0
+                if ncr_col not in merged.columns:
+                    merged[ncr_col] = 0.0
+
+                # Combined
+                out[ev] = merged[cr_col].astype(float) + merged[ncr_col].astype(float)
+                # CR-only
+                out[f"cr_{ev}"] = merged[cr_col].astype(float)
+                # NR-only (your request says 'nr_' not 'ncr_')
+                out[f"nr_{ev}"] = merged[ncr_col].astype(float)
+
+            # Optional: keep total_articles if present in CR file
+            if 'total_articles' in df_cr.columns:
+                out['total_articles'] = df_cr['total_articles']
+
+            # Save
             out_file = os.path.join(CIVIC_DEST_DIR, f"{country}.csv")
-            df_merged.to_csv(out_file, index=False)
+            out.to_csv(out_file, index=False)
             print(f"[CIVIC] Saved: {out_file}")
         except Exception as e:
             print(f"[CIVIC] Error processing {country}: {e}")
     else:
         print(f"[CIVIC] Missing files for {country} in {full_path}")
+
 
 # ==========================================
 # RAI DATA PROCESSING (unchanged)

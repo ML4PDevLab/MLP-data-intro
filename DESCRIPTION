@@ -29,5 +29,5 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1
-URL: https://github.com/username/mlp-data-intro
-BugReports: https://github.com/username/mlp-data-intro/issues
+URL: https://github.com/ML4PDevLab/MLP-data-intro
+BugReports: https://github.com/ML4PDevLab/MLP-data-intro/issues

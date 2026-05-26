@@ -1,4 +1,4 @@
-# mlp-data-intro
+# MLP-data-intro
 
 ## Project Overview
 
