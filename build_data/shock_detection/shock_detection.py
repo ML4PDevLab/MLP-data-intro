@@ -11,10 +11,6 @@ import warnings
 warnings.filterwarnings('ignore')
 from peak_detector import PeakDetector
 import matplotlib.dates as mdates
-from keras import Input, Model
-from tensorflow.keras.layers import TFSMLayer
-import tensorflow as tf
-TFSMLayer = tf.keras.layers.TFSMLayer
 
 # =========================
 # Global Variables Inputs
@@ -28,6 +24,7 @@ year = today.strftime("%Y")
 # Paths (relative)
 # =========================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+USE_TF_PEAK_MODEL = os.environ.get("MLP_USE_TF", "0") == "1"
 
 civic_data_folder = os.path.join(SCRIPT_DIR, '../../data/1-civic-aggregate')
 rai_data_folder   = os.path.join(SCRIPT_DIR, '../../data/1-rai-aggregate')
@@ -73,25 +70,32 @@ def get_updated_files(path='.'):
 
 def _load_tfsm_model():
     """Load TF SavedModel for peak fusion (same as your civic/rai path)."""
+    if not USE_TF_PEAK_MODEL:
+        return None
+
+    from keras import Input, Model
+    import tensorflow as tf
+
     script_dir = os.path.dirname(__file__)
     model_path = os.path.join(script_dir, 'content', 'model_version1')
+    TFSMLayer = tf.keras.layers.TFSMLayer
     layer = TFSMLayer(model_path, call_endpoint='serving_default')
     inp = Input(shape=(2,))
     out = layer(inp)
     return Model(inputs=inp, outputs=out)
 
 def convert_to_training_data_2(Y, country, event, peak_detector, loaded_model=None):
-    if loaded_model is None:
-        loaded_model = _load_tfsm_model()
-
     X_values = peak_detector.peak_detection(Y)
     X_values = np.nan_to_num(np.array(X_values))
     X_values = X_values.reshape(-1, 2)
 
-    predictions = loaded_model.predict(X_values)
-    predictions = predictions['dense_5']
-    binary_predictions_NN = (predictions > 0.5).astype(int)
-    binary_predictions_NN = [item for sublist in binary_predictions_NN for item in sublist]
+    if loaded_model is None:
+        binary_predictions_NN = [0] * len(X_values)
+    else:
+        predictions = loaded_model.predict(X_values)
+        predictions = predictions['dense_5']
+        binary_predictions_NN = (predictions > 0.5).astype(int)
+        binary_predictions_NN = [item for sublist in binary_predictions_NN for item in sublist]
 
     binary_predictions_algorithm = peak_detector.peak_detection_conservative(Y)
     binary_predictions_algorithm = [int(v) for v in binary_predictions_algorithm]
