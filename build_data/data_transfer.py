@@ -39,7 +39,10 @@ def get_latest_date_folder(country_path):
     date_dirs = [d for d in subdirs if re.fullmatch(r'\d{4}_\d{1,2}_\d{1,2}', d)]
     if not date_dirs:
         return None
-    return sorted(date_dirs)[-1]
+    def date_key(name):
+        year, month, day = name.split('_')
+        return int(year), int(month), int(day)
+    return max(date_dirs, key=date_key)
 
 def normalize_date(df):
     """Converts 'date' to first of month (YYYY-MM-01) if present."""
@@ -107,26 +110,38 @@ for country in countries:
             if 'date' not in merge_keys:
                 merge_keys = ['date']
 
-            # Restrict to keys + normalized columns
+            # Restrict to keys + event count / normalized columns
+            def raw_event_cols(df):
+                keys = {'date', 'year', 'month', 'country', 'influencer', 'total_articles'}
+                return [c for c in df.columns if c not in keys and not c.endswith('Norm')]
+
             def norm_cols(df):
                 return [c for c in df.columns
                         if c.endswith('Norm') and c not in ['country', 'influencer']]
 
+            cr_raws = raw_event_cols(df_cr)
+            ncr_raws = raw_event_cols(df_ncr)
             cr_norms  = norm_cols(df_cr)
             ncr_norms = norm_cols(df_ncr)
 
             # Align columns: assume same event set, but be robust
-            all_events = sorted(set(cr_norms) | set(ncr_norms))
+            all_raw_events = sorted(set(cr_raws) | set(ncr_raws))
+            all_norm_events = sorted(set(cr_norms) | set(ncr_norms))
 
             # Fill missing Norm columns with 0 so we can sum safely
-            for c in all_events:
+            for c in all_raw_events:
+                if c not in df_cr.columns:
+                    df_cr[c] = 0
+                if c not in df_ncr.columns:
+                    df_ncr[c] = 0
+            for c in all_norm_events:
                 if c not in df_cr.columns:
                     df_cr[c] = 0.0
                 if c not in df_ncr.columns:
                     df_ncr[c] = 0.0
 
-            cr_select  = merge_keys + all_events
-            ncr_select = merge_keys + all_events
+            cr_select  = merge_keys + all_raw_events + all_norm_events
+            ncr_select = merge_keys + all_raw_events + all_norm_events
 
             df_cr_sel  = df_cr[cr_select].copy()
             df_ncr_sel = df_ncr[ncr_select].copy()
@@ -142,7 +157,20 @@ for country in countries:
             # - non-civic:    nr_eventNorm = NCR only
             out = merged[merge_keys].copy()
 
-            for ev in all_events:
+            for ev in all_raw_events:
+                cr_col  = f"{ev}_cr"
+                ncr_col = f"{ev}_ncr"
+
+                if cr_col not in merged.columns:
+                    merged[cr_col] = 0
+                if ncr_col not in merged.columns:
+                    merged[ncr_col] = 0
+
+                out[ev] = merged[cr_col].fillna(0).astype(int) + merged[ncr_col].fillna(0).astype(int)
+                out[f"cr_{ev}"] = merged[cr_col].fillna(0).astype(int)
+                out[f"nr_{ev}"] = merged[ncr_col].fillna(0).astype(int)
+
+            for ev in all_norm_events:
                 cr_col  = f"{ev}_cr"
                 ncr_col = f"{ev}_ncr"
 
