@@ -296,7 +296,6 @@ ggsave(here("writing", "source_entry_heatmap.png"), plot = p,
 
 ## Section 2: Languages in HQMARC
 
-
 The *HQMARC* corpus includes domestic media outlets publishing in `r nl` languages. These languages include `r unlist(gsub(";.*", "", ISO_639_2[ISO_639_2$Alpha_2 %in% langs, ]$Name))`. Below, we provide the languages associated with media outlets in each country using the language ISO codes.
 
 ```{r}
@@ -422,8 +421,6 @@ To demonstrate the importance of our custom workflow, we present a case study co
 We compare *HQMARC's* coverage of three prominent Bangladeshi news outlets to that of GDELT and Internet Archive. We focus on for Bangladesh three reasons. First, Bangladeshi outlets publish a high volume of articles relative to other countries, making them more likely to attract automated crawlers. Second, the website architecture for each outlet is straightforward, maximizing the likelihood that crawlers and automated parsers will accurately retrieve articles. Third, many Bangladeshi sources publish primarily in English, reducing the additional hurdles of multilingual parsing. As a result, we regard these outlets as a "best-case scenario" for large-scale media repositories.
 
 Despite favorable conditions, we find notable differences between *HQMARC* and the aggregators. *HQMARC's* coverage begins in 2013 for one source and in 2015 for the other two. However, GDELT does not have any articles published before 2019 for any of the three sources. Even after 2019, GDELT captures many fewer articles than *HQMARC*. For the source with the smallest disparity between *HQMARC* and GDELT, GDELT retrieves an average of 2,100 articles per month, compared to 2,500 in *HQMARC*. GDELT also includes numerous broken links, redirects, duplicate articles, etc. that *HQMARC's* human review removed. In addition, GDELT's five-second delay per query makes it extremely time-consuming to scrape a full historical archive of this size. Across these three sources, Internet Archive achieved coverage similar to that of *HQMARC*, but more than half of these urls were broken and no longer pointed to the a webpage that contained the article text. Furthermore, collecting URLs from Internet Archive for 2019--2023 required roughly two weeks from a single source and returned many irrelevant and duplicate links not contained in *HQMARC*.
-
-
 
 
 # Appendix B: Civic Space Definitions, Keywords, and Classifier Performance
@@ -568,7 +565,7 @@ This document lists the categories where keywords are currently being deployed a
 -   Purpose of Keywords
     -   The purpose of these keywords is to assign a second event category to those articles in corruption that also feature arrests, legal action, and purges. Articles in those categories that feature these words are double counted as both corruption and the original category.
 
-##Section 3: Classifier Performance
+## Section 3: Classifier Performance
 
 | Event Category              | Precision | Recall | F1   |
 |-----------------------------|-----------|--------|------|
@@ -643,7 +640,7 @@ For each of the 40 country-event-month combinations, we retrieve all relevant ar
 
 # Appendix G: Comparison of ML4P and ACLED Protest DAta
 
-To compared ACLED and ML4P protest data, we first sum ACLED counts by month. This produces an overlap of 7,219 country-months between the two sources. We exclude analysis of ACLED's crowd-size tag because it is empty or not reported for 83% of protests and not specific for an additional 10%. For each country we compute the correlation between ACLED mothly counts and the ML4P measure across its months. The median correlation between ACLED protest counts and the ML4P's protest salience measure is 0.39. Taking the top decile of each series within each country, the two overlap on only 31% of country-months. In countries with full coverage from 2012 through the end of the series, ACLED mean monthly protest counts rise from 29.2 to 77.0, which partially reflects a well understood expansion of ACLED coverage over time; ML4P's protest share is more steady, falling slightly in aggregate from 1.7% to 1.6% over the time series.  
+To compared ACLED and ML4P protest data, we first sum ACLED counts by month. This produces an overlap of 7,219 country-months between the two sources. We exclude analysis of ACLED's crowd-size tag because it is empty or not reported for 83% of protests and not specific for an additional 10%. For each country we compute the correlation between ACLED monthly counts and the ML4P measure across its months. The median correlation between ACLED protest counts and the ML4P's protest salience measure is 0.39. Taking the top decile of each series within each country, the two overlap on only 31% of country-months. In countries with full coverage from 2012 through the end of the series, ACLED mean monthly protest counts rise from 29.2 to 77.0, which partially reflects a well understood expansion of ACLED coverage over time; ML4P's protest share is more steady, falling slightly in aggregate from 1.7% to 1.6% over the time series.  
 
 To better understand the characteristics of the two series, we focus on the most divergent months between ML4P and ACLED, i.e. the largest monthly surges in ML4P protest salience when ACLED counts do *not* increase and vice-verse. We flag surges as any month exceeding twice its 25-month rolling median while falling in the country's top decile. We did desk research on the 25 biggest gaps across distinct country-months. Table 6 presents the 13 cases in which the largest ML4P surges are not associated with surges in ACLED, including the total number of ACLED protests, protest salience (i.e. protest attention share) from ML4P, and how those compare with their within-country distributions.
 
