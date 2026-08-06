@@ -1,29 +1,34 @@
 ---
-title: "Tracking Civic Space in Developing Countries with a High-Quality Corpus of Domestic Media and Transformer Models"
-abstract: "Civic space---the fundamental freedoms necessary for citizens to influence politics---is under constant contestation. Despite the importance of day-to-day contestation over these rights, there is very little data allowing us to study the events and processes that constitute this struggle. We introduce new data that captures civic space activity across 66 developing countries from 2012 to 2024. Using an original corpus of over 120 million articles from nearly 350 high-quality domestic media outlets and 30 international and regional outlets, we use human-supervised web scraping and open-source computational tools to track monthly variation in media attention across 20 civic space events. Our approach yields three achievements: first, our corpus provides unprecedented coverage of reporting by developing country media outlets, addressing biases in other media event data; second, the resulting monthly event data set covers a wide range of new civic space activities; and third, we demonstrate the utility of this data for identifying and forecasting major political events and discuss applications for research on regime dynamics during a time of democratic backsliding."
+title: "\\huge Tracking Civic Space in Developing Countries with a High-Quality Corpus of Domestic Media and Transformer Models"
+abstract: "\\small Civic space---the fundamental freedoms necessary for citizens to influence politics---is under constant contestation. Despite the importance of day-to-day contestation over these rights, there is very little data allowing us to study the events and processes that constitute this struggle. We introduce new data that captures civic space activity across 66 developing countries from 2012 to 2024. Using an original corpus of over 120 million articles from nearly 350 high-quality domestic media outlets and 30 international and regional outlets, we use human-supervised web scraping and open-source computational tools to track monthly variation in media attention across 20 civic space events. Our approach yields three achievements: first, our corpus provides unprecedented coverage of reporting by developing country media outlets, addressing biases in other media event data; second, the resulting monthly event data set covers a wide range of new civic space activities; and third, we demonstrate the utility of this data for identifying and forecasting major political events and discuss applications for research on regime dynamics during a time of democratic backsliding."
 
-thanks: This paper is the result of a collaborative effort, and authors appear in alphabetical order. Donald A. Moratz took the lead in drafting the manuscript, Jeremy Springman in conducting the analysis, Erik Wibbels in guiding the project as PI, and all other authors contributed to the development and writing of the paper. This study was funded by the United States Agency for International Development (USAID) Bureau for Democracy, Human Rights, and Governance and the Open Society Foundations. We would like to thank many partners in the NGO and policy world who have helped in the development of this work, including Laura McKechnie, Dan Spealman, Asta Zinbo, Daniel Sabet, Erin McCarthy, and David Jacobstein. We also thank several researchers who were instrumental in the origins of this project, including Scott de Marchi and Spencer Dorsey, and a number of others who made critical contributions along the way, including Rethis Togbedji Gansey, Andreas Beger, Tim McDade, Akanksha Bhattacharyya, and Joan Timoneda.
+thanks: "\\scriptsize This paper is the result of a collaborative effort, and authors appear in alphabetical order. Donald A. Moratz took the lead in drafting the manuscript, Jeremy Springman in conducting the analysis, Erik Wibbels in guiding the project as PI, and all other authors contributed to the development and writing of the paper. This study was funded by the United States Agency for International Development (USAID) Bureau for Democracy, Human Rights, and Governance and the Open Society Foundations. We would like to thank many partners in the NGO and policy world who have helped in the development of this work, including Laura McKechnie, Dan Spealman, Asta Zinbo, Daniel Sabet, Erin McCarthy, and David Jacobstein. We also thank several researchers who were instrumental in the origins of this project, including Scott de Marchi and Spencer Dorsey, and a number of others who made critical contributions along the way, including Rethis Togbedji Gansey, Andreas Beger, Tim McDade, Akanksha Bhattacharyya, and Joan Timoneda. The primary public-facing resource for the *Machine Learning for Peace* (*ML4P*) is our interactive website and dashboard: https://web.sas.upenn.edu/mlp-devlab/. The country–month *ML4P* data and replication materials for all analyses reported in this article are available in the article’s GitHub replication repository: https://github.com/ML4PDevLab/MLP-data-intro. Researchers seeking alternative temporal aggregations, including weekly data, may submit a request through the *ML4*P data request form. The *High-Quality Media from Aid Receiving Countries* (*HQMARQ*) has been collected by custom scraping and parsing of publicly available media. The corpus itself cannot be shared given plausible interpretations of copyright protections against disseminating original content, but the authors are happy to work with researchers who seek access to selected content from the underlying corpus."
+
 
 
 #date: today 
 #date-format: long
 
+date: today 
+date-format: long
 authors:
-  - name: Serkant Adiguzel
+  - name:  Fatih Serkant Adiguzel
     affiliations:
       - ref: su
     corresponding: false
     email: serkant.adiguzel@sabanciuniv.edu
+    orcid: 0000-0002-9636-6618
     equal-contributor: false
   - name: Zung-Ru Lin
     affiliations:
-      - ref: upenn
+      - ref: upenn1
     corresponding: false
     email: zungru@sas.upenn.edu
     equal-contributor: false
-  - name: Donald A. Moratz
+  - name: Donald Moratz
     affiliations:
-      - ref: upenn
+      - ref: upenn1
+      - ref: upenn2
     corresponding: false
     email: dmoratz@sas.upenn.edu
     equal-contributor: false
@@ -32,56 +37,66 @@ authors:
       - ref: uta
     corresponding: false
     email: diego.romero@austin.utexas.edu
-    equal-contributor: false    
+    orcid: 0000-0002-3133-7904
+    equal-contributor: false
   - name: Mahda Soltani
     affiliations:
-      - ref: stu
+      - ref: stf
     corresponding: false
-    email: msoltani@sas.upenn.edu
     equal-contributor: false
   - name: Jeremy Springman
     affiliations:
-      - ref: upenn
+      - ref: meta
+      - ref: upenn1
     corresponding: false
-    email: jspr@sas.upenn.edu
-    equal-contributor: false    
+    email: jeremyrgs6@gmail.com
+    orcid: 0000-0002-2389-8605
+    equal-contributor: false
   - name: Hanling Su
-    affiliations:
-      - ref: upenn
+    affiliations: 
+      - ref: upenn1
     corresponding: false
     email: hanlings@sas.upenn.edu
-    equal-contributor: false
+    equal-contributor: false  
   - name: Jitender Swami
-    affiliations:
+    affiliations: 
       - ref: tu
     corresponding: false
-    email: jswami@sas.upenn.edu
-    equal-contributor: false    
-  - name: Mateo Villamizar-Chaparro
+    email: swamiji@sas.upenn.edu
+    equal-contributor: false  
+  - name: Mateo Villamizar Chaparro
     affiliations:
       - ref: ucu
     corresponding: false
     email: santiago.villamizar@ucu.edu.uy
+    orcid: 0000-0001-7760-1670
     equal-contributor: false
   - name: Erik Wibbels
     affiliations:
-      - ref: upenn
-    corresponding: false
+      - ref: upenn1
+      - ref: upenn2
+    corresponding: true
     email: ewibbels@sas.upenn.edu
+    orcid: 0009-0007-6723-3414
     equal-contributor: false
 affiliations:
+  - id: upenn1
+    name: PDRI-DevLab, University of Pennsylvania
+  - id: upenn2
+    name: Department of Political Science, University of Pennsylvania
+  - id: meta
+    name: Demography and Survey Science, Meta
   - id: su
-    name: Sabanci University, Turkiye
-  - id: upenn
-    name: University of Pennsylvania
+    name: Faculty of Arts and Social Sciences, Sabancı University, Turkiye
   - id: uta
-    name: Univerity of Texas at Austin
-  - id: stu
-    name: Stanford University 
-  - id: tu
-    name: Temple University   
+    name: LBJ School of Public Policy, University of Texas at Austin
   - id: ucu
-    name: Universidad Católica del Uruguay, Uruguay
+    name: Department of Social Sciences, Universidad Católica del Uruguay, Uruguay  
+  - id: tu
+    name: Department of Political Science, Temple University 
+  - id: stf
+    name: Department of Political Science, Stanford University 
+    
 filters:
   - authors-block
 
@@ -96,7 +111,10 @@ format:
       text: |
         \usepackage{etoolbox}
         % Reduce vertical space just before the abstract
-        \AtBeginEnvironment{abstract}{\vspace{-0.75\baselineskip}}
+        \AtBeginEnvironment{abstract}{\vspace{-2\baselineskip}}
+        % Shrink author names and date on the title page (KOMA-Script scrartcl)
+        \setkomafont{author}{\small}
+        \setkomafont{date}{\small}
 
 header-includes:
   - \usepackage{multirow}
@@ -199,7 +217,7 @@ Second, reliable repositories of high-quality, domestic media corpora are diffic
 
 Furthermore, most other projects rely on private aggregators like Factiva or LexisNexis, which source in a limited number of languages and provide inconsistent coverage due to erratic changes in licensing agreements that researchers can rarely account for.[^2] For instance, our analysis of all sources available from the LexisNexis University archive shows that for six *ML4P*  countries it includes no domestic outlets, and across the *ML4P* countries where Lexis Nexis has at least one local source, their sources publish in 17 languages compared to *ML4P's* `r nl`. As Section 6 shows, domestic and international outlets differ substantially in what they report, with many domestically important events missing from international coverage.
 
-[^2]:Adding or dropping sources introduces the possibility that trends in the volume of reporting dedicated to specific events are artifacts of changes in source material rather than true changes in the salience of events. Similarly, ACLED's documentation notes that "... the addition of such a source in an ad hoc fashion risks the integrity of historical trends as it will introduce an ‘artificial spike’ in the data. This refers to the phenomenon where if that same source was first back-coded before being introduced into the data, the ‘spike’ that its inclusion introduces in the data would be gone (or minimized), suggesting that the spike does not reflect a ‘true spike’ in disorder on the ground" [@acled_adding_sources_2023].
+[^2]: Adding or dropping sources risks creating artificial trends, since shifts in reporting volume may reflect changes in source material rather than true changes in event salience. ACLED's documentation notes similarly caution that introducing a source ad hoc—without back-coding it historically—produces an artificial spike that misrepresents true activity on the ground [@acled_adding_sources_2023].
 
 Alternatively, "big data" repositories like GDELT, Internet Archive, and Common Crawl use automated crawlers to collect news articles from huge numbers of sources with impressive linguistic diversity, but as we show below, they fail to achieve comprehensive or consistent capture from many domestically important news sources. For example, while GDELT crawls a massive number of sources publishing in more than 100 languages, the lack of human oversight means that the sources they pull from changes constantly [@raleigh2023political]. Below we show that the large-scale crawlers capture a small share of the total articles published by most sources. We further document that their use of automated parsers to extract metadata produces inaccuracies in critical fields, such as the date on which articles are published.
 
@@ -229,7 +247,7 @@ The result is a flexible research infrastructure that balances breadth of covera
 
 3.  **Develop Custom Scrapers and Parsers:** Afterwards, we deploy scrapers and parsers tailored to each website's structure and publishing practices. These tools can bypass common barriers such as robot blockers, which affect roughly 15% of our sources. These source-specific scrapers minimize data loss and ensure accurate capture of critical metadata (e.g., publication date).[^4]
 
-[^4]: Paywalls are rare among *HQMARC's* domestic outlets and do not affect source selection, as we rely only on publicly accessible article openings (see the next section).
+[^4]: Paywalls are rare in the countries in our sample and do not affect source selection (see the next section).
 
 4.  **Monitor and Update Quarterly:** Finally, we evaluate scraper and parser performance every 90 days, adapting to changes in website architecture. This monitoring helps detect when a source reduces its publication frequency, alters its website architecture, or shuts down entirely.
 
@@ -251,20 +269,20 @@ To generate the *ML4P* data tracking civic space events, we use open-source comp
 
 After scraping articles, we translate the first 600 characters of all non-English articles into English using neural machine translation (NMT) models hosted on Hugging Face or OpenNMT.[^5] To select translation models, we evaluate all available Hugging Face models on sample articles in each language and assess whether the translations are sufficiently clear to identify the main event being reported. When multiple models perform well, we select the one with the clearest sentence-level translations, using Google Translate as a benchmark to detect any loss of contextual detail. For every language in the corpus, we identified a model that produced translations sufficiently accurate for both human coders and our event classifier.
 
-[^5]: While multilingual transformer models capable of classifying events directly in multiple languages exist, these models currently do not support the diversity of languages in *HQMARC*. However, once more capable open-source models become available, *ML4P's* flexible infrastructure will allow us to quickly apply these models to the entire *HQMARC* corpus.
-
+[^5]: Existing multilingual models do not yet cover *HQMARC's* full language range; as open-source models improve, *ML4P's* flexible infrastructure will allow us to apply them corpus-wide.
 
 ### Identifying Locations
 
 Both international and domestic outlets report on events taking place across many countries. We identify all locations mentioned in the first 600 characters of each article. If no country is identified, we assign the article to the country where the publishing outlet is based. For international and regional outlets, articles are assigned to a country only if the first 600 characters explicitly mention a location there. For domestic outlets, we use the CLIFF-CLAVIN geoparser with the GeoNames gazetteer to identify geographic entities (e.g., states, cities, and towns) and retrieve their corresponding country codes through the CLIFF API.[^6]
 
-[^6]: CLIFF-CLAVIN integrates the [GeoNames](https://www.geonames.org/) database [@dignazio2014cliff]. For technical details on CLIFF, see: [CLIFF Annotator](https://github.com/mediacloud/cliff-annotator). We implement several corrections to the underlying CLIFF system, including overriding an error that assigns mentions of \enquote{West Africa} to Angola and the assignment of \enquote{Gaza} to locations named \enquote{Ghaza} in Algeria and Pakistan.
+[^6]: CLIFF-CLAVIN integrates the [GeoNames](https://www.geonames.org/) database [@dignazio2014cliff]. For technical details on CLIFF, see: [CLIFF Annotator](https://github.com/mediacloud/cliff-annotator). We correct several CLIFF errors—e.g., mislabeling \enquote{West Africa} as Angola, and \enquote{Ghaza} in Algeria and Pakistan as \enquote{Gaza}.
 
 ### Classifying Civic Space Events
 
 To classify articles into 20 civic space event categories, we fine-tuned an open-source, transformer-based RoBERTa large language model [@liu2019roberta].[^7] To fine-tune the model, we built a double human-coded training dataset of 6,475 newspaper articles originally published in both English and non-English languages. As reported in Appendix B, the model achieves 82% out-of-sample accuracy---comparable to intercoder reliability---with most misses coming from articles reporting on multiple events. To reduce noise associated with background and contextual content, we classify only the title and first 600 characters.[^8] In a few cases, we allow dual classifications for overlapping events (e.g., corruption with arrests). For several categories, we further apply a targeted keyword filter to eliminate common false-positives. See Appendix B Section 1 for a definition and examples for each event category and Appendix B Section 2 for a description of keyword filtering.
 
-[^7]: Recent research shows that closed-source LLMs perform only moderately better, at far higher cost [@deandrade2024], while RoBERTa performs well for most political science applications [@timoneda2024roberta] (e.g., the protest-classification pipeline developed by @haunss2025papea with fine-tuned XLM-RoBERTa), and consistently outperform dictionary-based approaches [@wang2024finetuning].
+[^7]: Closed-source LLMs perform only moderately better at far higher cost [@deandrade2024], while RoBERTa performs well for most political science applications [@timoneda2024roberta; @haunss2025papea] and outperforms dictionary-based approaches [@wang2024finetuning].
+<!--Recent research shows that closed-source LLMs perform only moderately better, at far higher cost [@deandrade2024], while RoBERTa performs well for most political science applications [@timoneda2024roberta] (e.g., the protest-classification pipeline developed by @haunss2025papea with fine-tuned XLM-RoBERTa), and consistently outperform dictionary-based approaches [@wang2024finetuning].-->
 
 [^8]: This corresponds to the title and first 2–3 sentences. Extensive testing suggests that adding more text reduces performance by introducing context that obscures the main event.
 
@@ -338,7 +356,7 @@ We also identify all nine countries in our sample---Burkina Faso, DR Congo, Ethi
 
 Finally, since *ML4P* does not record unique events, we ask how it relates to a well-recognized event count dataset. We assess *ML4P's* capacity to measure the importance of protests in a way that is distinctive from ACLED's protest event data. To do so, we sum ACLED protest events by month and compare them to our monthly measure of protest salience. See Appendix G for more details on the comparison of the 7,219 country-month. The two correlate only moderately within countries (median 0.39), and only about a third of the country-months either flags as unusually high are common to the two. The divergence is systematic and clusters around two sets of causes. First, *ML4P* rises without a rise in ACLED counts when a single large mobilization dominates the news. For example, Pakistan’s August, 2014 protests fall in the 7th percentile of its ACLED distribution but is the single highest month in *ML4P*. That month saw the culmination of the longest sit-in in Pakistani political history with hundreds of thousands of participants in Islamabad alone. Second and conversely, ACLED counts increase without a rise in *ML4P* when many small, dispersed gatherings occur, or when another story dominates the agenda. The two sources measure different quantities: ACLED how many protests occurred, while *ML4P* measures how much they mattered for civic space.[^10] Which dataset is more appropriate depends on the research question. 
 
-[^10]: ACLED provides data on the size of protests which would speak to salience, but it is missing for the vast majority of protests in the 7219 country-months that overlap with *ML4P*.   
+[^10]: ACLED provides data on protests' sizes which would speak to salience, but it is missing for the vast majority of protests in the 7219 country-months that overlap with *ML4P*.   
 
 # 5. Use Case: Forecasting Travel Advisory Onsets with ML4P {#sec-usecase}
 

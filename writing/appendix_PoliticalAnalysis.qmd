@@ -296,7 +296,6 @@ ggsave(here("writing", "source_entry_heatmap.png"), plot = p,
 
 ## Section 2: Languages in HQMARC
 
-
 The *HQMARC* corpus includes domestic media outlets publishing in `r nl` languages. These languages include `r unlist(gsub(";.*", "", ISO_639_2[ISO_639_2$Alpha_2 %in% langs, ]$Name))`. Below, we provide the languages associated with media outlets in each country using the language ISO codes.
 
 ```{r}
@@ -422,8 +421,6 @@ To demonstrate the importance of our custom workflow, we present a case study co
 We compare *HQMARC's* coverage of three prominent Bangladeshi news outlets to that of GDELT and Internet Archive. We focus on for Bangladesh three reasons. First, Bangladeshi outlets publish a high volume of articles relative to other countries, making them more likely to attract automated crawlers. Second, the website architecture for each outlet is straightforward, maximizing the likelihood that crawlers and automated parsers will accurately retrieve articles. Third, many Bangladeshi sources publish primarily in English, reducing the additional hurdles of multilingual parsing. As a result, we regard these outlets as a "best-case scenario" for large-scale media repositories.
 
 Despite favorable conditions, we find notable differences between *HQMARC* and the aggregators. *HQMARC's* coverage begins in 2013 for one source and in 2015 for the other two. However, GDELT does not have any articles published before 2019 for any of the three sources. Even after 2019, GDELT captures many fewer articles than *HQMARC*. For the source with the smallest disparity between *HQMARC* and GDELT, GDELT retrieves an average of 2,100 articles per month, compared to 2,500 in *HQMARC*. GDELT also includes numerous broken links, redirects, duplicate articles, etc. that *HQMARC's* human review removed. In addition, GDELT's five-second delay per query makes it extremely time-consuming to scrape a full historical archive of this size. Across these three sources, Internet Archive achieved coverage similar to that of *HQMARC*, but more than half of these urls were broken and no longer pointed to the a webpage that contained the article text. Furthermore, collecting URLs from Internet Archive for 2019--2023 required roughly two weeks from a single source and returned many irrelevant and duplicate links not contained in *HQMARC*.
-
-
 
 
 # Appendix B: Civic Space Definitions, Keywords, and Classifier Performance
@@ -568,7 +565,7 @@ This document lists the categories where keywords are currently being deployed a
 -   Purpose of Keywords
     -   The purpose of these keywords is to assign a second event category to those articles in corruption that also feature arrests, legal action, and purges. Articles in those categories that feature these words are double counted as both corruption and the original category.
 
-##Section 3: Classifier Performance
+## Section 3: Classifier Performance
 
 | Event Category              | Precision | Recall | F1   |
 |-----------------------------|-----------|--------|------|
@@ -641,7 +638,23 @@ For each of the 40 country-event-month combinations, we retrieve all relevant ar
 -   How many occurred in the assigned country?
 -   How many match the assigned event category?
 
-# Appendix G: Forecasting Data and Models
+# Appendix G: Comparison of ML4P and ACLED Protest DAta
+
+To compared ACLED and ML4P protest data, we first sum ACLED counts by month. This produces an overlap of 7,219 country-months between the two sources. We exclude analysis of ACLED's crowd-size tag because it is empty or not reported for 83% of protests and not specific for an additional 10%. For each country we compute the correlation between ACLED monthly counts and the ML4P measure across its months. The median correlation between ACLED protest counts and the ML4P's protest salience measure is 0.39. Taking the top decile of each series within each country, the two overlap on only 31% of country-months. In countries with full coverage from 2012 through the end of the series, ACLED mean monthly protest counts rise from 29.2 to 77.0, which partially reflects a well understood expansion of ACLED coverage over time; ML4P's protest share is more steady, falling slightly in aggregate from 1.7% to 1.6% over the time series.  
+
+To better understand the characteristics of the two series, we focus on the most divergent months between ML4P and ACLED, i.e. the largest monthly surges in ML4P protest salience when ACLED counts do *not* increase and vice-verse. We flag surges as any month exceeding twice its 25-month rolling median while falling in the country's top decile. We did desk research on the 25 biggest gaps across distinct country-months. Table 6 presents the 13 cases in which the largest ML4P surges are not associated with surges in ACLED, including the total number of ACLED protests, protest salience (i.e. protest attention share) from ML4P, and how those compare with their within-country distributions.
+
+![](descriptive_maps/figures/highML4P.png)
+These cases reflect three classes of difference between the two sources. The first involve a small number of very large, politically momentous mobilizations: Turkey in 2017, Pakistan in 2014, Liberia in 2019, and Philippines in 2016 are all examples. Each of these are seminal moments in the recent protest history of these countries. A second class reflects ACLED's definition and coding of riots and violence against civilian. If a peaceful protest turns violent on the same day ACLED records it as a Riot event, not a Protest event. This includes the cases of Sri Lanka, July 2022; South Africa, July 2021; Senegal, March 2021; Malawi, August 2019; and Zimbabwe, August 2019.  Third, is a set of cases where withdrawals or strikes serve as the forms of protest, which ACLED does not record. These include Cameroon, December 2016; Kenya, December 2016; Tunisia, June 2022; Ghana, October 2024 (though in this last case there were also 3 days of mass demonstrations in Accra).
+
+Table 7 provides the inverse set of cases, i.e. those where a surge in the number of ACLED protests is not matched with an increase in ML4P's protest measure. Analysis of these cases suggests three classes of cases. First are dispersed, routine, or localized mobilization. Nepal in July 2022 records 462 protest events against a flat ML4P score. In July 2022 Nepal held elections at every level of government that we met with decentralized protests in some localities (note that ACLED had also recently completed a supplemental coding project covering Nepal from 2018 with local partners). Tunisia's October 2020 regional economic protests, Bangladesh's May 2021 wave of small labour actions and similar protests in  Guatemala in January 2022 and Cambodia in August 2016 are of the same type. These cases underscore that ML4P places less weight on small local protests relative to ACLED. Second, the wave of July 2016 protests recorded in ACLED are reflected in a substantial number of articles covering protests in the ML4P corpus (126), but the salience of those protests are crowded out by the failed coup on July 15. ML4P captures that singular event with a large spike in its "irregular transitions" civic variable. From the point of view of civic space, the coup is the defining civic event of the month even if there were many protests. Third and finally, the Ethiopia in May 2018 points to a legitimate weakness in the ML4P approach, namely that it can be sensitive to overall corpus size and limitations of press freedom. The manuscript addresses these in its 'Limitations' section. 
+
+![](descriptive_maps/figures/lowML4P.png)
+We also used this exercise as a further validation check on the ML4P data by reviewing the 2825 individual protest articles across the 25 country-months in the two tables above. We identified 100 false positives constituting only 3.5/% of articles, and more than half of those (53) were a result of geoparsing failures. For instance, ML4P records a July 2022 article on protest in Nepal. Though published by a Nepali source (onlinekhabar.com), the article actually reports on a protest in Congo against the UN mission in that country which had endangered Nepali peacekeepers. Likewise, the Turkish press reports in several cases on Turkish protests for or against the government in foreign capitals during the July 2016 coup attempt.  
+
+In sum, ACLED event counts are sensitive to the number, dispersion, and duration of discrete gatherings. ML4P protest is sensitive to the political weight a national public and its press assigned to the protests. These are different quantities, and they disagree systematically rather than randomly. 
+
+# Appendix H: Forecasting Data and Models
 
 Control variables include: a composite economic covariate calculated as a within-country z-score of available monthly Trading Economics indicators for each country. Given the importance of both gradual and sudden shifts in political conditions, we lag all features by up to 12 months, allowing the model to detect both long-term precursors (such as increasing government repression) and short-term triggers (such as post-election violence). We account for persistence by including an indicator distinguishing between new HLTA onsets and continued warnings, a country-specific Bayesian prior that adjusts for baseline differences in advisory issuance, and a COVID-19 indicator to control for the pandemic-driven shock in travel warnings in 2020.
 
