@@ -2,7 +2,11 @@
 
 ## Project Overview
 
-This repository contains the academic paper data and code for "Tracking Civic Space in Developing Countries with a High-Quality Corpus of Domestic Media and Transformer Models". It hosts everything associated with the MLP (Machine Learning for Peace) data introduction paper. The dataset covers 65 developing countries across regions: Eastern Europe/Central Asia, MENA, Latin America & Caribbean, East Asia, Sub-Saharan Africa.
+This repository contains the academic paper data and code for "Tracking Civic Space in Developing Countries with a High-Quality Corpus of Domestic Media and Transformer Models". It hosts everything associated with the MLP (Machine Learning for Peace) data introduction paper. The current combined exports cover 66 countries for Civic Space and RAI and 69 countries for MLEED, which also includes Bolivia, Brazil, and Egypt.
+
+## Data Coverage Guide
+
+The draft [MLP Data Coverage and Indicator Guide](docs/DATA_COVERAGE_AND_INDICATORS.md) documents the countries, observed dates, indicators, and news-source coverage found in the current Civic Space, RAI, and MLEED exports. Refresh it after a data update with `python3 scripts/generate_data_coverage.py` and resolve its maintainer review flags before publication.
 
 **Manuscript Location**: 
 - **Main manuscript**: `writing/manuscript.qmd`
@@ -11,12 +15,12 @@ This repository contains the academic paper data and code for "Tracking Civic Sp
 ### Event Categories
 - **Civic events**: 20 categories including arrest, censor, protest, activism, coup, etc.
   - **CR variables**: Subset of civic events that are considered civil rights related
-- **RAI events**: 22 categories of international influence including arms transfers, diplomatic activities, economic aid
+- **RAI events**: 21 named categories of international influence, plus an unclassified/other field
 
 ## Source Management
 
 ### Source-types
-- **International sources**: 16 major outlets (BBC, Reuters, NYT, etc.)
+- **International sources**: 15 major outlets (BBC, Reuters, NYT, etc.)
 - **Regional sources**: 12 regional outlets
 - **Local sources**: Country-specific outlets
 
@@ -125,7 +129,7 @@ Core dependencies include: `tidyverse`, `here`, `psych`, `gt`, `kableExtra`, `gg
 
 
 ## Important Notes
-- All countries have data through 2024-12-01
+- Coverage end dates vary by country and dataset; see the generated data coverage guide
 - Date folder overrides can be specified in `date_folder()` function
 - Path configurations in `data_update.R` handle multiple user environments
 
@@ -182,7 +186,7 @@ The validation analysis is organized into modular R scripts that should be run i
 
 ### Descriptive Maps
 
-The `writing/descriptive_maps/` folder contains world map visualizations showing temporal patterns in civic space coverage across all 65 developing countries:
+The `writing/descriptive_maps/` folder contains world map visualizations showing temporal patterns in Civic Space coverage across the current 66-country export:
 
 #### Core Script
 - **`descriptive_maps.R`**: Refactored standalone R script (originally from `Maps_MVC.Rmd`) that generates temporal world maps using repository data and standardized variable mappings
