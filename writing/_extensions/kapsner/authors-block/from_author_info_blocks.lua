@@ -119,7 +119,9 @@ local function create_correspondence_blocks(authors, mark)
   }
   local sep = List:new{pandoc.Str',',  pandoc.Space()}
   return {
-    pandoc.Para(correspondence .. intercalate(corresponding_authors, sep))
+    pandoc.RawBlock('latex', '{\\footnotesize'),
+    pandoc.Para(correspondence .. intercalate(corresponding_authors, sep)),
+    pandoc.RawBlock('latex', '\\par}'),
   }
 end
 M.create_correspondence_blocks = create_correspondence_blocks
@@ -194,7 +196,11 @@ local function create_affiliations_blocks(affiliations)
       return num_inlines .. affil.name
     end
   )
-  return {pandoc.Para(intercalate(affil_lines, {pandoc.LineBreak()}))}
+  return {
+    pandoc.RawBlock('latex', '{\\footnotesize'),
+    pandoc.Para(intercalate(affil_lines, {pandoc.LineBreak()})),
+    pandoc.RawBlock('latex', '\\par}'),
+  }
 end
 M.create_affiliations_blocks = create_affiliations_blocks
 
