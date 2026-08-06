@@ -25,6 +25,9 @@ year = today.strftime("%Y")
 # =========================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 USE_TF_PEAK_MODEL = os.environ.get("MLP_USE_TF", "0") == "1"
+WRITE_SHOCK_PLOTS = os.environ.get("MLP_WRITE_SHOCK_PLOTS", "1") == "1"
+ABSOLUTE_SHOCK_COUNT_THRESHOLD = int(os.environ.get("MLP_SHOCK_COUNT_THRESHOLD", "3"))
+THRESHOLDED_SHOCK_COLUMN_SUFFIX = f"ShockCountGt{ABSOLUTE_SHOCK_COUNT_THRESHOLD}"
 
 civic_data_folder = os.path.join(SCRIPT_DIR, '../../data/1-civic-aggregate')
 rai_data_folder   = os.path.join(SCRIPT_DIR, '../../data/1-rai-aggregate')
@@ -123,6 +126,55 @@ def convert_to_training_data_2(Y, country, event, peak_detector, loaded_model=No
 
     return X_values, binary_predictions_algorithm, new_list
 
+def _raw_count_column(norm_col):
+    """Map an event normalized series to its raw-count column."""
+    return norm_col[:-4] if norm_col.endswith('Norm') else norm_col
+
+def _thresholded_shock_column(norm_col):
+    return f"{norm_col}{THRESHOLDED_SHOCK_COLUMN_SUFFIX}"
+
+def _thresholded_shock_flags(df, norm_col, raw_shock_flags):
+    raw_col = _raw_count_column(norm_col)
+    if raw_col not in df.columns:
+        warnings.warn(
+            f"Missing raw count column '{raw_col}' for '{norm_col}'; "
+            "thresholded shock flags will be 0."
+        )
+        return [0] * len(raw_shock_flags)
+
+    raw_counts = pd.to_numeric(df[raw_col], errors='coerce').fillna(0)
+    raw_shocks = pd.Series(raw_shock_flags, index=df.index).fillna(0).astype(int)
+    return ((raw_shocks == 1) & (raw_counts > ABSOLUTE_SHOCK_COUNT_THRESHOLD)).astype(int).tolist()
+
+def _is_shock_output_col(col):
+    return col.endswith('Shock') or 'ShockCountGt' in col
+
+def _plot_peak_detection(dfp, event, title, output_path):
+    if not WRITE_SHOCK_PLOTS:
+        return
+
+    dfp = dfp.copy()
+    dfp['date'] = pd.to_datetime(dfp['date'])
+
+    fig, ax2 = plt.subplots(figsize=(15, 12))
+    ax2.plot(dfp['date'], dfp[event], label='Normalized Number of Articles', color='green')
+    ax2.scatter(
+        dfp['date'][dfp[event + '_peaks'] == 1],
+        dfp[event][dfp[event + '_peaks'] == 1],
+        color='red',
+        label='Detected Peaks',
+        zorder=5,
+    )
+    ax2.set_xlabel('Date')
+    ax2.set_ylabel('Normalized Number of Articles')
+    ax2.legend(loc='upper right')
+    ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=5))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    plt.xticks(rotation=45)
+    plt.title(title)
+    plt.savefig(output_path)
+    plt.close()
+
 # =========================
 # CIVIC peak detection
 # =========================
@@ -174,29 +226,19 @@ def detect_peaks(folder, countries, date):
                     Y, country, event, peak_detector, loaded_model
                 )
                 peaks_df[event] = peaks_detected
+                peaks_df[_thresholded_shock_column(event)] = _thresholded_shock_flags(
+                    civic_data, event, peaks_detected
+                )
 
                 # plotting
                 dfp = civic_data.copy()
                 dfp[event + '_peaks'] = peaks_detected
-                dfp['date'] = pd.to_datetime(dfp['date'])
-
-                fig, ax2 = plt.subplots(figsize=(15, 12))
-                ax2.plot(dfp['date'], dfp[event],
-                         label='Normalized Number of Articles', color='green')
-                ax2.scatter(
-                    dfp['date'][dfp[event + '_peaks'] == 1],
-                    dfp[event][dfp[event + '_peaks'] == 1],
-                    color='red', label='Detected Peaks', zorder=5
+                _plot_peak_detection(
+                    dfp,
+                    event,
+                    f'Peak Detection for {country} - {event}',
+                    os.path.join(civic_plot_dir, f'{country}_{event}_peaks.png'),
                 )
-                ax2.set_xlabel('Date')
-                ax2.set_ylabel('Normalized Number of Articles')
-                ax2.legend(loc='upper right')
-                ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=5))
-                ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                plt.xticks(rotation=45)
-                plt.title(f'Peak Detection for {country} - {event}')
-                plt.savefig(os.path.join(civic_plot_dir, f'{country}_{event}_peaks.png'))
-                plt.close()
 
             # ---------- run shocks for CR series (cr_*) ----------
             for event in cr_events:
@@ -205,28 +247,18 @@ def detect_peaks(folder, countries, date):
                     Y, country, event, peak_detector, loaded_model
                 )
                 peaks_df[event] = peaks_detected
+                peaks_df[_thresholded_shock_column(event)] = _thresholded_shock_flags(
+                    civic_data, event, peaks_detected
+                )
 
                 dfp = civic_data.copy()
                 dfp[event + '_peaks'] = peaks_detected
-                dfp['date'] = pd.to_datetime(dfp['date'])
-
-                fig, ax2 = plt.subplots(figsize=(15, 12))
-                ax2.plot(dfp['date'], dfp[event],
-                         label='Normalized Number of Articles', color='green')
-                ax2.scatter(
-                    dfp['date'][dfp[event + '_peaks'] == 1],
-                    dfp[event][dfp[event + '_peaks'] == 1],
-                    color='red', label='Detected Peaks', zorder=5
+                _plot_peak_detection(
+                    dfp,
+                    event,
+                    f'Peak Detection for {country} - {event}',
+                    os.path.join(civic_plot_dir, f'{country}_{event}_peaks.png'),
                 )
-                ax2.set_xlabel('Date')
-                ax2.set_ylabel('Normalized Number of Articles')
-                ax2.legend(loc='upper right')
-                ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=5))
-                ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                plt.xticks(rotation=45)
-                plt.title(f'Peak Detection for {country} - {event}')
-                plt.savefig(os.path.join(civic_plot_dir, f'{country}_{event}_peaks.png'))
-                plt.close()
 
             # save civic peaks (combined + CR) for this country
             outfile = os.path.join(civic_result_folder, f'{country}.csv')
@@ -275,25 +307,18 @@ def detect_rai_peaks_by_influencer(folder, countries, date):
                 Y = rai_data[event]
                 _, _, peaks_detected = convert_to_training_data_2(Y, country, event, peak_detector, loaded_model)
                 peaks_df[event] = peaks_detected
+                peaks_df[_thresholded_shock_column(event)] = _thresholded_shock_flags(
+                    rai_data, event, peaks_detected
+                )
 
                 dfp = rai_data.copy()
                 dfp[event + '_peaks'] = peaks_detected
-                dfp['date'] = pd.to_datetime(dfp['date'])
-
-                fig, ax2 = plt.subplots(figsize=(15, 12))
-                ax2.plot(dfp['date'], dfp[event], label='Normalized Number of Articles', color='green')
-                ax2.scatter(dfp['date'][dfp[event + '_peaks'] == 1],
-                            dfp[event][dfp[event + '_peaks'] == 1],
-                            color='red', label='Detected Peaks', zorder=5)
-                ax2.set_xlabel('Date')
-                ax2.set_ylabel('Normalized Number of Articles')
-                ax2.legend(loc='upper right')
-                ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=5))
-                ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                plt.xticks(rotation=45)
-                plt.title(f'RAI Peak Detection for {country} ({influencer}) - {event}')
-                plt.savefig(os.path.join(rai_plot_dir, f'{country}_{influencer}_{event}_peaks.png'))
-                plt.close()
+                _plot_peak_detection(
+                    dfp,
+                    event,
+                    f'RAI Peak Detection for {country} ({influencer}) - {event}',
+                    os.path.join(rai_plot_dir, f'{country}_{influencer}_{event}_peaks.png'),
+                )
 
         outfile = os.path.join(rai_result_folder, f'{country}_{influencer}.csv')
         peaks_df.to_csv(outfile, index=False)
@@ -325,8 +350,6 @@ def detect_mleed_peaks(folder, countries, date):
         if '_' in fname or not fname.endswith('.csv'):
             continue
         country = fname[:-4]
-        if country not in country_list:
-            continue
 
         path = os.path.join(folder, fname)
         if not os.path.exists(path):
@@ -350,26 +373,19 @@ def detect_mleed_peaks(folder, countries, date):
             Y = df[event].values
             _, _, peaks_detected = convert_to_training_data_2(Y, country, event, peak_detector, loaded_model)
             peaks_df[event] = peaks_detected
+            peaks_df[_thresholded_shock_column(event)] = _thresholded_shock_flags(
+                df, event, peaks_detected
+            )
 
             # Plot
             dfp = df.copy()
             dfp[event + '_peaks'] = peaks_detected
-            dfp['date'] = pd.to_datetime(dfp['date'])
-
-            fig, ax2 = plt.subplots(figsize=(15, 12))
-            ax2.plot(dfp['date'], dfp[event], label='Normalized Number of Articles', color='green')
-            ax2.scatter(dfp['date'][dfp[event + '_peaks'] == 1],
-                        dfp[event][dfp[event + '_peaks'] == 1],
-                        color='red', label='Detected Peaks', zorder=5)
-            ax2.set_xlabel('Date')
-            ax2.set_ylabel('Normalized Number of Articles')
-            ax2.legend(loc='upper right')
-            ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=5))
-            ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-            plt.xticks(rotation=45)
-            plt.title(f'MLEED Peak Detection for {country} - {event}')
-            plt.savefig(os.path.join(mleed_plot_dir, f'{country}_{event}_peaks.png'))
-            plt.close()
+            _plot_peak_detection(
+                dfp,
+                event,
+                f'MLEED Peak Detection for {country} - {event}',
+                os.path.join(mleed_plot_dir, f'{country}_{event}_peaks.png'),
+            )
 
         outfile = os.path.join(mleed_result_folder, f'{country}.csv')
         peaks_df.to_csv(outfile, index=False)
@@ -500,10 +516,10 @@ def _normalize_date_col(df):
     return df
 
 def _rename_shock_cols(shock_df, on_cols):
-    """Rename all non-key columns in shock_df to append 'Shock' suffix."""
+    """Rename raw shock columns while preserving explicit thresholded shock names."""
     rename_map = {}
     for c in shock_df.columns:
-        if c not in on_cols:
+        if c not in on_cols and not _is_shock_output_col(c):
             rename_map[c] = f"{c}Shock"
     return shock_df.rename(columns=rename_map)
 
@@ -513,7 +529,7 @@ def _left_merge_shocks(full_df, shock_df, on_cols):
         return full_df
     merged = full_df.merge(shock_df, on=on_cols, how='left')
     # Fill shocks with 0 and cast to int where possible
-    shock_cols = [c for c in merged.columns if c.endswith('Shock')]
+    shock_cols = [c for c in merged.columns if _is_shock_output_col(c)]
     if shock_cols:
         merged[shock_cols] = merged[shock_cols].fillna(0)
         for c in shock_cols:
