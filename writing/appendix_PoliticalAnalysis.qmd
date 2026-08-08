@@ -529,7 +529,7 @@ Despite favorable conditions, we find notable differences between *HQMARC* and t
     -   **Example 1:** “A top Kenyan newspaper published a fake death notice of a prominent opposition financier on Wednesday, a bizarre error that rights groups interpreted as another sign of an anti-democratic slide. The Daily Nation apologized by mid-morning for publishing the funeral announcement for businessman Jimi Wanjigi, whose picture, history and family details were used but whose name was slightly altered. The paper said the ad was published in error and it was working with police to uncover who placed it. After a week of arrests of opposition politicians and a crackdown on independent media, a prominent rights campaigner said the announcement amounted to a death threat to Wanjigi, who funded opposition leader Raila Odinga’s election campaign last year and whose house was raided by police in October.”
     -   **Example 2:** “Nigeria’s main labor unions threatened a nationwide strike over recent increases in gas prices.”
 
-## Section 2 Keywords and Their Use
+## Section 2: Keywords and Their Use
 
 This document lists the categories where keywords are currently being deployed as well as a brief explanation for their use.
 
@@ -596,11 +596,11 @@ This document lists the categories where keywords are currently being deployed a
 
 These temporal world maps provide a comprehensive overview of civic space coverage patterns across all 65 developing countries in the HQMARC corpus from 2012 to 2024. The maps reveal significant variation in both the intensity of civic space reporting and the types of events that dominate coverage across countries and over time. Geographic clustering is evident, with certain regions showing consistently higher civic space article rates and distinct event profiles that reflect regional political and social dynamics. The temporal dimension captures important shifts corresponding to major political events, democratic transitions, and periods of civic space restriction across the developing world.
 
-## Civic Space Coverage Intensity
+## Section 1: Civic Space Coverage Intensity
 
 ![Civic space articles as percentage of total coverage by country-year. Countries are colored according to the proportion of their total news coverage dedicated to civic space events, providing insight into the relative salience of civic space issues across different national contexts. Light gray areas indicate countries without data coverage. The maps show temporal evolution from 2012 through 2024, revealing significant variation in civic space reporting intensity both across countries and over time.](descriptive_maps/figures/civic_space_percentage_appendix.png){#fig-civic-space-percentage width="100%"}
 
-## Dominant Civic Events by Country
+## Section 2: Dominant Civic Events by Country
 
 ![Most frequently reported civic event type per country-year. Countries are colored according to the civic event category with the highest reporting frequency in each year, showing the diversity of civic space concerns across different national contexts. The maps reveal regional patterns in dominant event types and temporal shifts in civic space priorities, from electoral activities to protests, corruption reporting, and other civic engagement forms.](descriptive_maps/figures/dominant_event_appendix.png){#fig-dominant-events width="100%"}
 
@@ -608,7 +608,7 @@ These temporal world maps provide a comprehensive overview of civic space covera
 
 These validation figures demonstrate the effectiveness of ML4P's event detection methodology by examining State of Emergency declarations across different regions during the COVID-19 pandemic. The vertical dashed red line at March 2020 marks the onset of the global pandemic, when countries worldwide implemented emergency measures including lockdowns, curfews, and restrictions on civil liberties. These plots validate our approach by showing systematic spikes in State of Emergency reporting across all regions coinciding with known policy responses to the pandemic.
 
-## State of Emergency Detection by Region
+## Section 1: State of Emergency Detection by Region
 
 ![State of Emergency events detection in East Asia and Pacific countries from 2019-2020. The plot shows the percentage of articles devoted to State of Emergency coverage over time, with red points indicating detected shock events. The vertical dashed red line marks March 2020, the beginning of the COVID-19 pandemic. Clear spikes are visible across multiple countries starting in March 2020, corresponding to the implementation of emergency measures and lockdowns in response to the pandemic.](event_validation/State_of_Emergency_East_Asia_and_Pacific.png){#fig-soe-eap width="100%"}
 
@@ -619,6 +619,7 @@ These validation figures demonstrate the effectiveness of ML4P's event detection
 ![State of Emergency events detection in Middle East and North Africa countries from 2019-2020. The plot shows the percentage of articles devoted to State of Emergency coverage over time, with red points indicating detected shock events. The vertical dashed red line marks March 2020, the beginning of the COVID-19 pandemic. Clear spikes in State of Emergency reporting are visible across countries in the region starting in March 2020, reflecting the implementation of emergency measures in response to the pandemic.](event_validation/State_of_Emergency_Middle_East_and_North_Africa.png){#fig-soe-mena width="100%"}
 
 ![State of Emergency events detection in Sub-Saharan Africa countries from 2019-2020. The plot shows the percentage of articles devoted to State of Emergency coverage over time, with red points indicating detected shock events. The vertical dashed red line marks March 2020, the beginning of the COVID-19 pandemic. Systematic increases in State of Emergency reporting are evident across multiple countries starting in March 2020, corresponding to the implementation of pandemic-related emergency measures and lockdowns.](event_validation/State_of_Emergency_Sub-Saharan_Africa.png){#fig-soe-ssa width="100%"}
+
 # Appendix E: Detection of Civic Space Shocks
 
 Our approach begins with winsorization of the monthlly normalized event counts. This  curbs the influence of extreme outliers by replacing values beyond a specified percentile threshold with the nearest boundary value. Next, we apply a 25-month rolling window to smooth the normalized event counts and perform a grid search to tune various parameters. These include the multipliers for weighted means and weighted standard deviations, as well as the binning weights and decay functions that govern how observations in the window are weighted. To capture shocks accurately, we employ two distinct weighting schemes for the historical (left-hand side, LHS) and future (right-hand side, RHS) segments of the rolling window. For the LHS window, we use a non-linear decay weighting that places progressively less emphasis on more distant historical months, enabling the detection of rapid changes in recent data. For the RHS window, we apply binning weights that decay linearly over time, preventing overestimation of peaks when the underlying data structure shifts. Combining winsorization with context-sensitive decay and binning weights enables monthly detection of significant increases in each civic space event type.
@@ -645,19 +646,120 @@ To compared ACLED and ML4P protest data, we first sum ACLED counts by month. Thi
 To better understand the characteristics of the two series, we focus on the most divergent months between ML4P and ACLED, i.e. the largest monthly surges in ML4P protest salience when ACLED counts do *not* increase and vice-verse. We flag surges as any month exceeding twice its 25-month rolling median while falling in the country's top decile. We did desk research on the 25 biggest gaps across distinct country-months. Table 6 presents the 13 cases in which the largest ML4P surges are not associated with surges in ACLED, including the total number of ACLED protests, protest salience (i.e. protest attention share) from ML4P, and how those compare with their within-country distributions.
 
 ![](descriptive_maps/figures/highML4P.png)
+
 These cases reflect three classes of difference between the two sources. The first involve a small number of very large, politically momentous mobilizations: Turkey in 2017, Pakistan in 2014, Liberia in 2019, and Philippines in 2016 are all examples. Each of these are seminal moments in the recent protest history of these countries. A second class reflects ACLED's definition and coding of riots and violence against civilian. If a peaceful protest turns violent on the same day ACLED records it as a Riot event, not a Protest event. This includes the cases of Sri Lanka, July 2022; South Africa, July 2021; Senegal, March 2021; Malawi, August 2019; and Zimbabwe, August 2019.  Third, is a set of cases where withdrawals or strikes serve as the forms of protest, which ACLED does not record. These include Cameroon, December 2016; Kenya, December 2016; Tunisia, June 2022; Ghana, October 2024 (though in this last case there were also 3 days of mass demonstrations in Accra).
 
 Table 7 provides the inverse set of cases, i.e. those where a surge in the number of ACLED protests is not matched with an increase in ML4P's protest measure. Analysis of these cases suggests three classes of cases. First are dispersed, routine, or localized mobilization. Nepal in July 2022 records 462 protest events against a flat ML4P score. In July 2022 Nepal held elections at every level of government that we met with decentralized protests in some localities (note that ACLED had also recently completed a supplemental coding project covering Nepal from 2018 with local partners). Tunisia's October 2020 regional economic protests, Bangladesh's May 2021 wave of small labour actions and similar protests in  Guatemala in January 2022 and Cambodia in August 2016 are of the same type. These cases underscore that ML4P places less weight on small local protests relative to ACLED. Second, the wave of July 2016 protests recorded in ACLED are reflected in a substantial number of articles covering protests in the ML4P corpus (126), but the salience of those protests are crowded out by the failed coup on July 15. ML4P captures that singular event with a large spike in its "irregular transitions" civic variable. From the point of view of civic space, the coup is the defining civic event of the month even if there were many protests. Third and finally, the Ethiopia in May 2018 points to a legitimate weakness in the ML4P approach, namely that it can be sensitive to overall corpus size and limitations of press freedom. The manuscript addresses these in its 'Limitations' section. 
 
 ![](descriptive_maps/figures/lowML4P.png)
-We also used this exercise as a further validation check on the ML4P data by reviewing the 2825 individual protest articles across the 25 country-months in the two tables above. We identified 100 false positives constituting only 3.5/% of articles, and more than half of those (53) were a result of geoparsing failures. For instance, ML4P records a July 2022 article on protest in Nepal. Though published by a Nepali source (onlinekhabar.com), the article actually reports on a protest in Congo against the UN mission in that country which had endangered Nepali peacekeepers. Likewise, the Turkish press reports in several cases on Turkish protests for or against the government in foreign capitals during the July 2016 coup attempt.  
+
+We also used this exercise as a further validation check on the ML4P data by reviewing the 2825 individual protest articles across the 25 country-months in the two tables above. We identified 100 false positives constituting only 3.5\% of articles, and more than half of those (53) were a result of geoparsing failures. For instance, ML4P records a July 2022 article on protest in Nepal. Though published by a Nepali source (onlinekhabar.com), the article actually reports on a protest in Congo against the UN mission in that country which had endangered Nepali peacekeepers. Likewise, the Turkish press reports in several cases on Turkish protests for or against the government in foreign capitals during the July 2016 coup attempt.  
 
 In sum, ACLED event counts are sensitive to the number, dispersion, and duration of discrete gatherings. ML4P protest is sensitive to the political weight a national public and its press assigned to the protests. These are different quantities, and they disagree systematically rather than randomly. 
 
 # Appendix H: Forecasting Data and Models
 
-Control variables include: a composite economic covariate calculated as a within-country z-score of available monthly Trading Economics indicators for each country. Given the importance of both gradual and sudden shifts in political conditions, we lag all features by up to 12 months, allowing the model to detect both long-term precursors (such as increasing government repression) and short-term triggers (such as post-election violence). We account for persistence by including an indicator distinguishing between new HLTA onsets and continued warnings, a country-specific Bayesian prior that adjusts for baseline differences in advisory issuance, and a COVID-19 indicator to control for the pandemic-driven shock in travel warnings in 2020.
+This appendix provides additional information on the two forecasting excercises presented in Section 5 of the manuscript. For additional technical details, refer to @hlta2025report.
 
-Results on our 6-month model yields a ROC-AUC of 0.87, AUC-PR of 0.31, and a Brier score of 0.14 (dummy AUC-PR = 0.01), while the rolling-window variant (±1 month) increases ROC-AUC to 0.90, AUC-PR to 0.57, and lowers the Brier score to 0.13, again with a dummy AUC-PR of 0.02.
+## Section 1: Forecasting Conflict Onset
+
+We develop two models using a LightGBM gradient-boosted tree classifier. The target variable is conflict onset from the UCDP/PRIO Armed Conflict Dataset (v24.1), defined as at least 25 battle-related deaths in a country-month with no ongoing conflict in the prior year. Because conflict onsets account for roughly 1\% of country-month observations, both models incorporate class weighting. The *ML4P* model's feature set consists of monthly *ML4P* civic salience measures stacked over a 12-month lag window to capture both proximate and more distal shifts in civic activity. These are supplemented by a Bayesian country-level baseline conflict risk encoding that pools each country's historical conflict rate toward the global mean, a months-since-last-conflict counter, an indicator of whether a conflict occurred within the past 12 months conflict, and country-specific z-scored monthly economic indicators from Trading Economics. The second model includes data from ACLED (v2024-01) instead of *ML4P*: six event types (battles, explosions/remote violence, protests, riots, strategic developments, and violence against civilians) aggregated to the country-month level. Everything else, including the lag structure, model architecture, and tuning procedure, remains unchanged.
+
+Both models are evaluated at 3- and 6-month forecast horizons under two schemes. The out-of-sample (OOS) setup trains on January 2012–December 2022 and tests on the full year 2023. Temporal cross-validation (TCV) uses rolling-origin folds in which the training window expands sequentially to each time cut and the model is evaluated on the immediately subsequent period, with folds synchronized to *ML4P's* quarterly data release cycle to ensure that only information available at prediction time enters training. Performance is assessed via ROC-AUC, AUC-PR, and Brier Score; AUC-PR results are benchmarked against a dummy classifier that assigns probabilities based on the baseline rate of conflict onset in the training data. @tbl-forecast-onset-performance presents peformance metrics for our forecasting models.
+
+```{r}
+#| label: tbl-forecast-onset-performance
+#| tbl-cap: "Conflic onset forecast performance across evaluation schemes and horizons"
+#| echo: false
+#| warning: false
+
+tribble(
+  ~`Evaluation Method`, ~`Horizon (mo.)`, ~`ROC AUC`, ~`AUC PR`, ~`Brier Score`,
+  "OOS (MLP)",   3, 0.80, 0.04, 0.29,
+  "TCV (MLP)",   3, 0.81, 0.05, 0.26,
+  "TCV (ACLED)", 3, 0.78, 0.04, 0.27,
+  "OOS (MLP)",   6, 0.87, 0.06, 0.01,
+  "TCV (MLP)",   6, 0.73, 0.03, 0.26,
+  "TCV (ACLED)", 6, 0.72, 0.03, 0.21
+) |>
+  kable(
+    format   = "latex",
+    booktabs = TRUE,
+    align    = c("l", "c", "c", "c", "c"),
+    linesep  = c("", "", "\\addlinespace", "", "")
+  ) |>
+  kable_styling() |>
+  footnote(
+    general_title = "Notes:",
+    general = paste(
+      "OOS = out-of-sample (single holdout period);",
+      "TCV = temporal cross-validation (rolling-origin folds that preserve time order).",
+      "ROC AUC = receiver operating characteristic area;",
+      "AUC PR = area under the precision--recall curve;",
+      "Brier = mean squared error of probabilistic forecasts."
+    ),
+    escape         = FALSE,
+    threeparttable = TRUE
+  )
+```
+
+
+![Top-ten average feature importances for the *ML4P* (left) and ACLED (right) models at the 3-month.](descriptive_maps/figures/FSE_forecasting_ML4PvsACLED_3m.png)
+
+
+![Top-ten average feature importances for the *ML4P* (left) and ACLED (right) models at the 6-month.](descriptive_maps/figures/FSE_forecasting_ML4PvsACLED_6m.png)
+
+
+## Section 2: Forecasting DoS' HLTAs
+
+The HLTA forecasting model builds on the same LightGBM framework and *ML4P* covariate structure as the conflict onset models but introduces several modifications tailored to the travel advisory target. The target variable is the onset of a U.S. Department of State high-level travel advisory (Levels 3 or 4 in the post-2018 four-level system, or any advisory in the pre-2018 period), compiled monthly for all 60 countries in the MLP dataset from January 2012 through December 2023. Travel advisory onsets account for only 1.42\% of country-month observations. We construct two onset measures: a fixed indicator (value of 1 for the specific month of onset) and a rolling quarterly window (value of 1 for the month before, the month of, and the month after onset), the latter capturing advisories that may fall slightly outside rigid monthly boundaries. In addition to the *ML4P* civic salience measures and economic z-scores, the model incorporates a Bayesian country-level baseline encoding re-estimated for travel advisory onset rates; a "continued advisory" covariate that flags country-months in which an advisory begun in a prior period remains active, distinguishing persistence from new issuance; and a COVID-19 indicator marking advisories explicitly linked to the pandemic, which produced a sharp structural break in onset counts during 2020–2022.
+
+Unlike the conflict onset forecasting exercise, we do not present a comparison with an ACLED-based forecasting model for HLTAs, since ACLED event data are not expected to capture the broader range of threats---including health crises, natural disasters, and crime---that drive travel advisory issuance.
+
+Table @tbl-forecast-hlta-performance reports forecast performance for the HLTA forecast model across 3- and 6-month horizons and two onset window specifications. The fixed measure takes the value of 1 for the specific month of an advisory onset; the rolling quarterly window (±1 month) additionally captures advisories that may fall slightly outside rigid monthly reporting boundaries. ROC-AUC scores are consistently strong across all specifications (0.87–0.90), indicating reliable discrimination between onset and non-onset country-months. The AUC-PR metric, which is more sensitive to the rarity of onsets (1.42% of country-months), improves substantially under the rolling window specification: AUC-PR rises from 0.26 to 0.54 at the 3-month horizon and from 0.31 to 0.57 at the 6-month horizon, in both cases far exceeding the dummy model baseline (0.01–0.02). The dummy model assigns every observation the unconditional onset probability and thus represents the floor of performance achievable without any predictive signal; the 26- to 57-fold improvement in AUC-PR confirms that the civic salience measures capture genuine early-warning information beyond the base rate. Brier Scores are low across all specifications (0.12–0.14), indicating well-calibrated probability estimates.
+
+```{r}
+#| label: tbl-forecast-hlta-performance
+#| tbl-cap: "HLTAs' forecast performance across evaluation schemes and horizons"
+#| echo: false
+#| warning: false
+
+tribble(
+  ~`Horizon (mo.)`, ~`ROC AUC`, ~`AUC PR`, ~`Dummy AUC PR`, ~`Brier Score`,
+  "3-Month Fixed",   0.87, 0.26, 0.01, 0.14,
+  "3-Month Rolling Window (±1 Month)", 0.89, 0.54, 0.02, 0.126,
+  "6-Month Fixed", 0.87, 0.31, 0.01, 0.14,
+  "6-Month Rolling Window (±1 Month)", 0.90, 0.57, 0.02, 0.13
+) |>
+  kable(
+    format   = "latex",
+    booktabs = TRUE,
+    align    = c("l", "c", "c", "c", "c"),
+    linesep  = c("", "", "\\addlinespace", "", "")
+  ) |>
+  kable_styling() |>
+  footnote(
+    general_title = "Notes:",
+    general = paste(
+      "ROC AUC = receiver operating characteristic area;",
+      "AUC PR = area under the precision--recall curve;",
+      "Dummy AUC PR = AUC-PR of a baseline model that assigns every observation the unconditional onset probability.",
+      "Brier = mean squared error of probabilistic forecasts."
+    ),
+    escape         = FALSE,
+    threeparttable = TRUE
+  )
+```
+
+<!-- Our LightGBM models evaluated via temporal cross-validation achieve a ROC-AUC of 0.87, AUC-PR of 0.26, and Brier score of 0.14 at the 3-month horizon against a dummy AUC-PR of 0.01; counting predictions as correct within ±1 month of the forecast improves performance to ROC-AUC 0.89, AUC-PR 0.54, and Brier 0.12. Performance results for our 6-month model yield a ROC-AUC of 0.87, AUC-PR of 0.31, and a Brier score of 0.14 (dummy AUC-PR = 0.01), while the rolling-window variant (±1 month) increases ROC-AUC to 0.90, AUC-PR to 0.57, and lowers the Brier score to 0.13, again with a dummy AUC-PR of 0.02. -->
+
+![Top 10 Average Feature Importances for 3- and 6-Month Forecasts.](descriptive_maps/figures/FSE_forecasting_hlta.png)
+
 
 Above and beyond these traditional measures of forecast accuracy, we also trained the model on data through December 2023 and generated predictions for advisory onsets in March and June 2024. The model correctly flagged Bangladesh for June 2024, which later received an HLTA due to the July Revolution. It also identified Zimbabwe and Liberia as high-risk for March 2024, and while DOS did not issue an HLTA for these countries, Zimbabwe expelled USAID staff in March, prompting U.S. officials to issue multiple security statements. These cases highlight the practical value of early warnings derived from high-frequency civic space indicators, even when they do not always align with official government actions.
+
+
+
+<!--These advisories serve as official DOS risk assessments and capture a diverse array of threats, including civil unrest, political repression, armed conflict, health emergencies, and crime waves. These advisories drive critical operational responses, including embassy closures, staff relocations, and security escalations.-->
+
+<!--We define a binary onset indicator equal to 1 in the first country–month an advisory appears and 0 thereafter, predicting travel advisory onsets. To forecast HLTA onsets, we use *ML4P's* monthly civic salience measures across all 20 categories and a series of economic and country-specific controls (see Appendix H). HLTA onsets occur in only 1.42% of country months, making this a challenging forecasting target. We train a LightGBM gradient boosted tree model, which handles class imbalance and captures nonlinear interactions among variables, providing forecasts for 3- and 6-month horizons. To generalize to unseen periods, we use temporal cross-validation, restricting training data to past observations and preventing information leakage [@rodolfa2021empirical].[^12] We evaluate model performance using ROC-AUC (ranking accuracy), AUPRC (precision-recall tradeoffs for rare events), and the Brier score (probability calibration).-->
