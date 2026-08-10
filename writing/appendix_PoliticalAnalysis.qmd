@@ -9,6 +9,8 @@ format:
     colorlinks: true
     toc: true
 
+bibliography: references.bib
+
 header-includes:
   - \usepackage{multirow}
   - \usepackage{hyperref}
@@ -589,7 +591,7 @@ This document lists the categories where keywords are currently being deployed a
 | **Raid**                    | 1.00      | 0.83   | 0.91 |
 | **Irrelevant events**       | 0.81      | 0.79   | 0.80 |
 
-: Performance metrics for fine-tuned RoBERTa classification model. -999 {#tbl-roberta}
+: Performance metrics for fine-tuned RoBERTa classification model. {#tbl-roberta}
 
 
 # Appendix C: Descriptive Maps
@@ -755,7 +757,7 @@ tribble(
 
 ![Top 10 Average Feature Importances for 3- and 6-Month Forecasts.](descriptive_maps/figures/FSE_forecasting_hlta.png)
 
-
+## Out-of-sample predictions
 Above and beyond these traditional measures of forecast accuracy, we also trained the model on data through December 2023 and generated predictions for advisory onsets in March and June 2024. The model correctly flagged Bangladesh for June 2024, which later received an HLTA due to the July Revolution. It also identified Zimbabwe and Liberia as high-risk for March 2024, and while DOS did not issue an HLTA for these countries, Zimbabwe expelled USAID staff in March, prompting U.S. officials to issue multiple security statements. These cases highlight the practical value of early warnings derived from high-frequency civic space indicators, even when they do not always align with official government actions.
 
 
@@ -763,3 +765,5 @@ Above and beyond these traditional measures of forecast accuracy, we also traine
 <!--These advisories serve as official DOS risk assessments and capture a diverse array of threats, including civil unrest, political repression, armed conflict, health emergencies, and crime waves. These advisories drive critical operational responses, including embassy closures, staff relocations, and security escalations.-->
 
 <!--We define a binary onset indicator equal to 1 in the first country–month an advisory appears and 0 thereafter, predicting travel advisory onsets. To forecast HLTA onsets, we use *ML4P's* monthly civic salience measures across all 20 categories and a series of economic and country-specific controls (see Appendix H). HLTA onsets occur in only 1.42% of country months, making this a challenging forecasting target. We train a LightGBM gradient boosted tree model, which handles class imbalance and captures nonlinear interactions among variables, providing forecasts for 3- and 6-month horizons. To generalize to unseen periods, we use temporal cross-validation, restricting training data to past observations and preventing information leakage [@rodolfa2021empirical].[^12] We evaluate model performance using ROC-AUC (ranking accuracy), AUPRC (precision-recall tradeoffs for rare events), and the Brier score (probability calibration).-->
+
+# References
