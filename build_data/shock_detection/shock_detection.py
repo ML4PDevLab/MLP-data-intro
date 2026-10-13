@@ -42,22 +42,6 @@ os.makedirs(rai_result_folder,   exist_ok=True)
 os.makedirs(mleed_result_folder, exist_ok=True)  # <-- NEW
 
 # =========================
-# Countries
-# =========================
-country_list = [
-
-                # 'Guatemala', 'Honduras',  'El Salvador', 'Nicaragua'
-    
-                'Albania', 'Algeria', 'Angola', 'Armenia', 'Azerbaijan', 'Bangladesh', 'Belarus', 'Benin', 'Burkina Faso',
-                'Cambodia', 'Cameroon', 'Colombia', 'Costa Rica', 'DR Congo', 'Dominican Republic', 'Ecuador', 'El Salvador',
-                'Ethiopia', 'Georgia', 'Ghana', 'Guatemala', 'Honduras', 'Hungary', 'India', 'Indonesia', 'Jamaica', 'Kazakhstan',
-                'Kenya', 'Kosovo', 'Kyrgyzstan', 'Liberia', 'Macedonia', 'Malawi', 'Malaysia', 'Mali', 'Mauritania', 'Mexico', 'Moldova',
-                'Morocco', 'Mozambique', 'Namibia', 'Nepal', 'Nicaragua', 'Niger', 'Nigeria', 'Pakistan', 'Panama', 'Paraguay',
-                'Peru', 'Philippines', 'Rwanda', 'Senegal', 'Serbia', 'Solomon Islands', 'South Africa', 'South Sudan', 'Sri Lanka',
-                'Tanzania', 'Timor Leste', 'Tunisia', 'Turkey', 'Uganda', 'Ukraine', 'Uzbekistan', 'Zambia', 'Zimbabwe'
-                ]
-
-# =========================
 # Helpers
 # =========================
 def get_updated_files(path='.'):
@@ -191,8 +175,8 @@ def detect_peaks(folder, countries, date):
     loaded_model = _load_tfsm_model()
 
     peak_results = {}
-    for country in country_list:
-        if country in countries:
+    for country in sorted(countries):
+        if country:
             file = country + '.csv'
             path = os.path.join(folder, file)
             if not os.path.exists(path):
@@ -288,9 +272,6 @@ def detect_rai_peaks_by_influencer(folder, countries, date):
         if '_' not in rai_file or not rai_file.endswith('.csv'):
             continue
         country, influencer = rai_file[:-4].split('_', 1)
-        if country not in country_list:
-            continue
-
         path = os.path.join(folder, rai_file)
         if not os.path.exists(path):
             continue
